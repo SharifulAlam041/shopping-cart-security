@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/order-info/**
+          filters:
+            - AuthenticationFilter
+
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/product/**
+          filters:
+            - AuthenticationFilter
+
+        - id: identity-service
+          uri: lb://identity-service
+          predicates:
+            - Path=/auth/**
+
+  config:
+    import: "optional:configserver:http://localhost:8088"
